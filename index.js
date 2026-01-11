@@ -1,11 +1,22 @@
-document.addEventListener('DOMContentLoaded', () => {
-	const myButton = document.querySelector('.pressable-button');
-	if (!myButton) {
-		console.warn('No element with class "pressable-button" found.');
-		return;
-	}
+async function fetchData() {
+    try {
+        const pokemonName = document.getElementById("pokemonName").value.toLowerCase();
+        
+       
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`);
 
-	myButton.addEventListener('click', () => {
-		myButton.textContent = 'Button Was Clicked!';
-	});
-});
+        if (!response.ok) {
+            throw new Error("Could not fetch resource");
+        }
+
+        const data = await response.json();
+        const pokemonSprite = data.sprites.front_default;
+        const imgElement = document.getElementById("pokemonSprite");
+
+        imgElement.src = pokemonSprite;
+        imgElement.style.display = "block";
+    } catch (error) {
+        console.error(error);
+        alert("Pokemon not found! Please check the spelling.");
+    }
+}
